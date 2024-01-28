@@ -2,18 +2,18 @@ import { getFrameMetadata } from '@coinbase/onchainkit';
 import type { Metadata } from 'next';
 
 const frameMetadata = getFrameMetadata({
-  buttons: ['Next image'],
-  image: 'https://zizzamia.xyz/park-1.png',
-  post_url: 'https://zizzamia.xyz/api/frame',
+  buttons: ['Am I a true fan'],
+  image: 'https://a-frame-ashen.vercel.app/',
+  post_url: 'https://a-frame-ashen.vercel.app/api/frame',
 });
 
 export const metadata: Metadata = {
   title: 'zizzamia.xyz',
-  description: 'LFG',
+  description: 'tywen was here',
   openGraph: {
-    title: 'zizzamia.xyz',
-    description: 'LFG',
-    images: ['https://zizzamia.xyz/park-1.png'],
+    title: 'testing',
+    description: 'tywen was here',
+    images: ['https://a-frame-ashen.vercel.app/'],
   },
   other: {
     ...frameMetadata,
