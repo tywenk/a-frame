@@ -1,16 +1,37 @@
 import { getFrameAccountAddress } from '@coinbase/onchainkit';
 import { NextRequest, NextResponse } from 'next/server';
+import { CastParamType, NeynarAPIClient, isApiErrorResponse } from '@neynar/nodejs-sdk';
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   let accountAddress = '';
   try {
-    const body: { trustedData?: { messageBytes?: string } } = await req.json();
-    console.log('body', body);
+    const body: {
+      untrustedData?: {
+        fid?: number;
+        url?: string;
+        messageHash?: string;
+        timestamp: number;
+        network?: number;
+        buttonIndex?: 1;
+        castId?: { fid?: number; hash?: string };
+      };
+      trustedData?: { messageBytes?: string };
+    } = await req.json();
+    const client = new NeynarAPIClient(process.env.NEYNAR_API_KEY as string);
     accountAddress = await getFrameAccountAddress(body, {
       NEYNAR_API_KEY: process.env.NEYNAR_API_KEY,
     });
+    const cast = await client.lookUpCastByHashOrWarpcastUrl(
+      body.untrustedData?.castId?.hash as string,
+      CastParamType.Hash,
+    );
+    console.log('the cast!!!', cast);
   } catch (err) {
-    console.error(err);
+    if (isApiErrorResponse(err)) {
+      console.log('API Error', err.response.data);
+    } else {
+      console.log('Generic Error', err);
+    }
   }
 
   return new NextResponse(`<!DOCTYPE html><html><head>
